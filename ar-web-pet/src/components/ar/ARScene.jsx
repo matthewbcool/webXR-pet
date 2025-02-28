@@ -1,42 +1,33 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { XR, Interactive, Controllers, Hands } from '@react-three/xr';
-import { Environment, OrbitControls } from '@react-three/drei';
-import usePetStore from '../../hooks/usePetStore';
-import { Egg } from '../../Egg'; // Import the proper Egg component
-import { Glub } from '../Glub'; // Import Glub component
-
-const PetModel = () => {
-    const isEgg = usePetStore(state => state.isEgg);
-    const hatchEgg = usePetStore(state => state.hatchEgg);
-
-    return (
-        <Suspense fallback={null}>
-            <Interactive onSelect={() => isEgg && hatchEgg()}>
-                {isEgg ? (
-                    // Use the imported Egg component from egg.jsx
-                    <Egg position={[0, 0, -0.5]} scale={0.25} />
-                ) : (
-                    <Glub position={[0, 0, -0.5]} scale={0.15} />
-                )}
-            </Interactive>
-            <Environment preset="sunset" />
-        </Suspense>
-    );
-};
+import { XR, Controllers, Hands, ARButton, RayGrab, Interactive } from '@react-three/xr';
+import PetModel from '../PetModel';
 
 const ARScene = () => {
     return (
-        <Canvas>
-            <XR>
-                <ambientLight intensity={0.8} />
-                <pointLight position={[10, 10, 10]} intensity={1} />
-                <OrbitControls />
-                <PetModel />
-                <Controllers />
-                <Hands />
-            </XR>
-        </Canvas>
+        <>
+            <ARButton
+                sessionInit={{
+                    requiredFeatures: ['hit-test', 'hand-tracking'],
+                    optionalFeatures: ['dom-overlay'],
+                    domOverlay: { root: document.body }
+                }}
+            />
+            <Canvas>
+                <XR referenceSpace="local">
+                    <ambientLight intensity={0.8} />
+                    <pointLight position={[10, 10, 10]} intensity={1} />
+                    <Suspense fallback={null}>
+                        <PetModel />
+                    </Suspense>
+                    <Controllers rayMaterial={{ color: 'blue' }} />
+                    <Hands 
+                        pinchDistance={0.05} // Reduced pinch distance for better detection
+                        hideRays={false}     // Show rays for debugging
+                    />
+                </XR>
+            </Canvas>
+        </>
     );
 };
 

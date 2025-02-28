@@ -9,8 +9,10 @@
     "serve": "vite preview --host"
   },
   "dependencies": {
+    "@react-spring/three": "^9.7.5",
     "@react-three/drei": "^9.76.0",
-    "@react-three/fiber": "^8.13.0",
+    "@react-three/fiber": "^8.18.0",
+    "@react-three/handle": "^6.6.8",
     "@react-three/xr": "^5.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -20,7 +22,7 @@
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.2.0",
     "@vitejs/plugin-react": "^4.0.0",
-    "vite": "^4.3.9",
+    "vite": "^6.2.0",
     "vite-plugin-html": "^3.2.2"
   },
   "keywords": [
